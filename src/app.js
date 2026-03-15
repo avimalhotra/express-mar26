@@ -1,8 +1,11 @@
 import express from "express";
 import path from "node:path";
+import cookie, { signedCookie } from "cookie-parser";
 
 const app=express();
 const port= process.env.PORT || 3000;
+
+app.use(cookie("secret"));
 
 import apiRouter from "./routes/api.js";
 import coursesRouter from "./routes/courses.js";
@@ -10,7 +13,11 @@ import coursesRouter from "./routes/courses.js";
 app.use("/api", apiRouter);
 app.use("/courses", coursesRouter);
 
-// app.use(express.static(path.resolve("src/public")));
+app.use(express.static(path.resolve("src/public")));
+
+app.use(express.json());
+// Built-in middleware for parsing URL-encoded data
+app.use(express.urlencoded({ extended: true }));
 
 // app.use((req,res,next)=>{
 //      console.log(`App starts at ${new Date().toLocaleString()}, URL: ${req.url}`); 
@@ -19,27 +26,40 @@ app.use("/courses", coursesRouter);
 
 /* routes */
 app.get("/",(req,res)=>{
+     // console.log(req.cookies);
+     console.log(req.signedCookies.token);
      res.setHeader('Content-Type','text/html');
-     res.status(200).send(`<h1>Hello Express JS, ${req.url}</h1>`);
+     // res.cookie("city","noida");
+     res.cookie("state","up",{maxAge:86400000});
+     res.cookie("token","123456789ab",{signed:true});
+     res.status(200).send(`<h1>Hello Express JS, ${req.cookies.name}</h1>`);
 });
 
-// app.get("/angularjs",(req,res)=>{
-//      res.redirect("/angular");
-// });
-// app.get("/angular",(req,res)=>{
-//      res.status(200).send("Angular");
-// });
 
 app.get("/search",(req,res)=>{
      const q=req.query;
      res.status(200).send(q);
 });
 
+
+app.post("/signin",(req,res)=>{
+     const {email,pass}=req.body;
+     if(email=="avi@mail.com" && pass=="123456" ){
+          res.redirect("/admin");
+     }
+     else{
+          res.status(200).send("invalid email or password")
+     }
+});
+
 app.post("/post",(req,res)=>{
      console.log("post data");
      res.send("post data");
-     // res.status(200).json({"id":1, message:"data received"});
-})
+});
+
+app.get("/admin",(req,res)=>{
+     res.status(200).send('Hello Admin');
+});
 
 /* wildcard handler */
 app.get("/*splat",(req,res)=>{
