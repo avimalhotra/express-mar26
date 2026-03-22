@@ -1,50 +1,20 @@
 import express from "express";
 import path from "node:path";
-import cookie, { signedCookie } from "cookie-parser";
-import session from "express-session";
-import parseurl from "parseurl";
-import cluster from "node:cluster";
-import os from "node:os";
 
 
 const app=express();
 const port= process.env.PORT || 3000;
 
 
-// if(cluster.isMaster){
-//      const totalCPUs = os.cpus().length;
-//      console.log(`Master running... CPU threads: ${totalCPUs}`);
 
-//      for( let i=0; i<totalCPUs; i++){ cluster.fork(); }
-
-//      // Restart worker if it crashes
-//      cluster.on("exit", (worker) => {
-//           console.log(`Worker ${worker.process.pid} died. Restarting...`);
-//           cluster.fork();
-//      });
-// }
-
-
-// app.set('trust proxy', 1);
-
-// app.use(session({
-//      secret:"session",
-//      resave:false,
-//      saveUninitialized:true,
-//      cookie:{secure:false,maxAge:5000}
-// }));
-
-
-app.use(cookie("secret"));
-
-// import apiRouter from "./routes/api.js";
+import apiRouter from "./routes/api.js";
 // import coursesRouter from "./routes/courses.js";
 
 
-// app.use("/api", apiRouter);
+app.use("/api", apiRouter);
 // app.use("/courses", coursesRouter);
 
-// app.use(express.static(path.resolve("src/public")));
+app.use(express.static(path.resolve("src/public")));
 
 app.use(express.json());
 // Built-in middleware for parsing URL-encoded data
