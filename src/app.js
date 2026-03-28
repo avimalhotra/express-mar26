@@ -1,13 +1,13 @@
 import express from "express";
 import path from "node:path";
-
+import multer from "multer";
 
 const app=express();
 const port= process.env.PORT || 3000;
 
 
-
 import apiRouter from "./routes/api.js";
+import { original } from "parseurl";
 // import coursesRouter from "./routes/courses.js";
 
 
@@ -15,6 +15,18 @@ app.use("/api", apiRouter);
 // app.use("/courses", coursesRouter);
 
 app.use(express.static(path.resolve("src/public")));
+// const upload=multer({dest:'src/public/uploads'});
+const storage=multer.diskStorage({
+     destination:  (req, file, cb)=>{
+          cb(null, 'src/public/uploads/');
+    },
+    filename:(req,file,cb)=>{
+          // cb(null, file.originalname);
+          cb(null,Date.now()+path.extname(file.originalname));
+    }
+});
+
+const upload=multer({storage:storage});
 
 app.use(express.json());
 // Built-in middleware for parsing URL-encoded data
@@ -69,6 +81,12 @@ app.post("/post",(req,res)=>{
 
 app.get("/admin",(req,res)=>{
      res.status(200).send('Hello Admin');
+});
+
+app.post("/upload",upload.single('resume'),(req,res)=>{
+     // console.log(req.file);
+     // console.log(req.body);
+     res.status(200).send("uploaded");
 });
 
 /* wildcard handler */
