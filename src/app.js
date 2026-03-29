@@ -1,10 +1,13 @@
 import express from "express";
 import path from "node:path";
 import multer from "multer";
+import ejs from "ejs";
 
 const app=express();
 const port= process.env.PORT || 3000;
 
+app.set('view engine', 'ejs');
+app.set('views', path.resolve("src/public/views") );
 
 import apiRouter from "./routes/api.js";
 import { original } from "parseurl";
@@ -54,7 +57,8 @@ app.get("/",(req,res)=>{
      // res.cookie("token","123456789ab",{signed:true});
      // res.status(200).send(`<h1>Hello Express JS, ${req.cookies.name}</h1>`);
      // res.status(200).send(`<h1>Hello Express JS, Sesion is: ${req.sessionID}, views: ${req.session.views['/']}</h1>`);
-     res.status(200).send(`<h1>Hello Express JS`);
+     // res.status(200).send(`<h1>Hello Express JS`);
+     res.render('index', {name:"Avinash", year:new Date().getFullYear(), user:{name:"lorem",id:24}, cars:["swift","polo","baleno"] });
 });
 
 

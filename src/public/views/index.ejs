@@ -1,0 +1,44 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+     <meta charset="UTF-8">
+     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+     <title>EJS Template Engine</title>
+     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css">
+     <link rel="stylesheet" href="/css/style.css">
+</head>
+<body>
+     <div class="container">
+
+          <%- include('header') %>
+
+          <main>
+               <h2>Main</h2>
+               <p>Dynamic Website build using EJS</p>
+               <p>Hello <%= name %> </p>
+
+               <% if(user){ %>
+                    <p>Username: <%= user.name %>, id:  <%= user.id %></p>
+               <% } %>
+
+               <h3>Cars</h3>
+               <!-- <p> <%= cars %> </p> -->
+               <ol>
+                    <% cars.forEach((i)=>{ %>
+                         <li><%= i %></li>
+                    <% }) %>
+               </ol>
+          </main>
+
+          <%- include('footer') %>
+     </div>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+<script>
+     "use strict";
+
+
+
+</script>
+</body>
+</html>
